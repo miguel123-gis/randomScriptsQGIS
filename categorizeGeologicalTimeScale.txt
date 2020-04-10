@@ -1,3 +1,7 @@
+# Used for the geology shapefile from philgis.org - http://philgis.org/thematic-maps/geology
+# Use in the Field Calculator
+# If Field A ('DESCRIPT') contains a certain word or is the word itself, it creates another attribute (the category) in Field B (category)
+
 CASE
 	WHEN "DESCRIPT" ILIKE '%PRE-JURASSIC%' THEN 'Pre-Jurassic'
 	WHEN "DESCRIPT" =  'CRETACEOUS' THEN 'Cretaceous'
