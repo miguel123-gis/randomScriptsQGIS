@@ -1,3 +1,7 @@
+# Made in January 2020 for freelance GIS work
+# Use in the Python console
+# Extracts a CSV, loads it as point layer, creates a buffer, and dissolves the buffers
+
 import processing
 
 def CSVtoPoint():
