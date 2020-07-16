@@ -1,0 +1,31 @@
+# Made in January 2020 for freelance GIS work
+# Use in the Python console
+# Extracts a CSV, loads it as point layer, creates a buffer, and dissolves the buffers
+
+import processing
+
+def parameters():
+    coords_path = r"file:///C:\Users\imper\Documents\new_GISfiles\pointBufferTool\xyPoints.csv?\
+    delimiter={}&crs=epsg:4326&xyDms=yes &xField={}&yField={}&quote={}".format(",", "x_long", "y_lat", "")
+    point_layerName = 'CalapanPoints_32651'
+    point_path = r"C:\Users\imper\Documents\new_GISfiles\pointBufferTool\shapefiles\CalapanPts_32651.shp"
+    point_crs = QgsCoordinateReferenceSystem(32651)
+    buffer_size = 1000 # meters
+    buffer_path = r'C:\Users\imper\Documents\new_GISfiles\pointBufferTool\shapefiles\pointBuffered_32651.shp'
+    dissolved_path = r'C:\Users\imper\Documents\new_GISfiles\pointBufferTool\shapefiles\bufferDissolved_32651.shp'
+    dissolved_name = "bufferDissolved_32651"
+    
+def pointBuffer():
+    # loads CSV as point, saves point as shp, add point shp to qgis
+    loadLayer = QgsVectorLayer(coords_path, point_layerName, "delimitedtext") 
+    saveLayer = QgsVectorFileWriter.writeAsVectorFormat(loadLayer, point_path, "utf-8",\
+    point_crs, "ESRI Shapefile") 
+    vLayer = iface.addVectorLayer(point_path, "CalapanPts_32651", "ogr") 
+    # buffers point
+    processing.runAndLoadResults('qgis:buffer', \
+    {'INPUT': point_path, 'DISTANCE': buffer_size, 'OUTPUT': buffer_path}) #
+    # dissolves buffers
+    processing.run("native:dissolve", {'INPUT': buffer_path, 'OUTPUT': dissolved_path})
+    vLayer = iface.addVectorLayer(dissolved_path, dissolved_name, "ogr")
+    
+pointBuffer()
